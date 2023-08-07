@@ -1,8 +1,8 @@
 ### 0x00. AirBnB clone - The console
 
-- This is a minified version of AirBNB.
+This is a minified version of AirBNB.
 
-* The complete web application will have:
+The complete web application will have:
     - A command interpreter to manipulate data without a visual interface, like in a Shell (perfect for development and debugging)
     - A website (the front-end) that shows the final product to everybody: static and dynamic
     - A database or files that store data (data = objects)
