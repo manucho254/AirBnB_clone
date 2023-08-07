@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+find . -name "*.py" -type f -exec chmod +x {} \;

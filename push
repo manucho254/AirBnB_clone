@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ -z "$1" ]
+then
+	echo "\$ Usage: ./push 'changes to repo'"
+	echo "\$ Please add a commit message!"
+else
+	git add .
+	git commit -m "$1"
+	git push
+fi
