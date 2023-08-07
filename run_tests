@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Script to run python tests
+
+if [ -s tests ]
+then
+	python3 -m unittest discover tests;
+fi
