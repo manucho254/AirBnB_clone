@@ -13,12 +13,25 @@ class BaseModel:
     """ BaseModel that defines all common,
         attributes/methods for other classes.
     """
-    def __init__(self) -> None:
+    def __init__(self, *args, **kwargs) -> None:
         """ method to initalize class BaseModel
+            Args:
+                args: a list of positional arguments.
+                kwargs: a dict of keyword arguments.
         """
-        self.id = uuid4()
-        self.created_at = CURRENT_DATE
-        self.updated_at = CURRENT_DATE
+        if len(kwargs) > 0:  # if kwargs is not empty
+            attrs = self.__dict__
+            for key, val in kwargs.items():
+                check_dates = key == "created_at" or key == "updated_at"
+
+                if key != "__class__" and not check_dates:
+                    attrs[key] = val
+                if key == "created_at" or key == "updated_at":
+                    attrs[key] = self.__to_datetime(val)
+        else:
+            self.id = uuid4()
+            self.created_at = CURRENT_DATE
+            self.updated_at = CURRENT_DATE
 
     def __str__(self) -> str:
         """ get string respresentation of class BaseModel.
@@ -46,9 +59,21 @@ class BaseModel:
 
         return base_dict
 
-    def __to_string(self, date: datetime) -> str:
-        """ convert datetime object to string in ISO format
+    def __to_string(self, date_obj: datetime) -> str:
+        """ convert datetime object to string in ISO format.
+            Args:
+                date_obj: datetime object.
             Return:
                   string represetation of datetime object in ISO format.
         """
-        return date.isoformat()
+        return date_obj.isoformat()
+
+    def __to_datetime(self, date_string: str) -> datetime:
+        """ convert string represantation of date to datetime object.
+            Args:
+                date_string: datetime string.
+            Return:
+                  datetime object from string.
+        """
+
+        return datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%f")
