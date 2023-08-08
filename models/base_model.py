@@ -22,14 +22,14 @@ class BaseModel:
         if len(kwargs) > 0:  # if kwargs is not empty
             attrs = self.__dict__
             for key, val in kwargs.items():
-                check_dates = key == "created_at" or key == "updated_at"
-
-                if key != "__class__" and not check_dates:
-                    attrs[key] = val
-                if key == "created_at" or key == "updated_at":
+                if key == "__class__":
+                    pass
+                elif key == "created_at" or key == "updated_at":
                     attrs[key] = self.__to_datetime(val)
+                else:
+                    attrs[key] = val
         else:
-            self.id = uuid4()
+            self.id = str(uuid4())
             self.created_at = CURRENT_DATE
             self.updated_at = CURRENT_DATE
 
