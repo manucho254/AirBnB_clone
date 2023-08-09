@@ -30,7 +30,7 @@ class BaseModel:
                 elif key == "updated_at" or key == "created_at":
                     attrs[key] = self.__to_datetime(val)
                 else:
-                    attrs[key] = val 
+                    attrs[key] = val
         else:
             self.id = str(uuid4())
             self.created_at = CURRENT_DATE
