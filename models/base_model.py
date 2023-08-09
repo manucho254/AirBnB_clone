@@ -5,6 +5,8 @@
 from uuid import uuid4
 from datetime import datetime
 
+from models import storage
+
 
 CURRENT_DATE = datetime.now()
 
@@ -32,6 +34,7 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = CURRENT_DATE
             self.updated_at = CURRENT_DATE
+            storage.new(self)
 
     def __str__(self) -> str:
         """ get string respresentation of class BaseModel.
@@ -39,12 +42,17 @@ class BaseModel:
                   string represtation of BaseModel.
         """
         class_name = self.__class__.__name__
-        return "[{0}] ({1}) <{2}>".format(class_name, self.id, self.__dict__)
+        return "[{0}] ({1}) {2}".format(class_name, self.id, self.__dict__)
 
     def save(self) -> None:
         """ update public instance updated_at
         """
-        self.updated_at = CURRENT_DATE
+        if isinstance(self.__dict__["updated_at"], str):
+            self.updated_at = self.__to_string(CURRENT_DATE)
+        else:
+            self.updated_at = CURRENT_DATE
+
+        storage.save()
 
     def to_dict(self) -> dict:
         """ get and return all keys/values of __dict__
@@ -53,11 +61,13 @@ class BaseModel:
                  keys/values of __dict__ of the instance.
         """
         base_dict = self.__dict__
-        base_dict["created_at"] = self.__to_string(base_dict["created_at"])
-        base_dict["updated_at"] = self.__to_string(base_dict["updated_at"])
+        if isinstance(base_dict["created_at"], datetime):
+            base_dict["created_at"] = self.__to_string(base_dict["created_at"])
+        if isinstance(base_dict["updated_at"], datetime):
+            base_dict["updated_at"] = self.__to_string(base_dict["updated_at"])
         base_dict["__class__"] = self.__class__.__name__
 
-        return base_dict
+        return self.__dict__
 
     def __to_string(self, date_obj: datetime) -> str:
         """ convert datetime object to string in ISO format.
@@ -66,6 +76,7 @@ class BaseModel:
             Return:
                   string represetation of datetime object in ISO format.
         """
+
         return date_obj.isoformat()
 
     def __to_datetime(self, date_string: str) -> datetime:
