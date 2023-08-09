@@ -34,7 +34,7 @@ class FileStorage:
 
         if hasattr(obj, "id"):
             key = "{}.{}".format(obj.__class__.__name__, obj.id)
-            self.__objects[key] = obj.to_dict()
+            self.__objects[key] = dict(obj.to_dict())
 
     def save(self) -> None:
         """ serializes __objects to the JSON file (path: __file_path)

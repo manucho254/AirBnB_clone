@@ -23,13 +23,14 @@ class BaseModel:
         """
         if len(kwargs) > 0:  # if kwargs is not empty
             attrs = self.__dict__
+
             for key, val in kwargs.items():
                 if key == "__class__":
-                    pass
-                elif key == "created_at" or key == "updated_at":
+                    continue
+                elif key == "updated_at" or key == "created_at":
                     attrs[key] = self.__to_datetime(val)
                 else:
-                    attrs[key] = val
+                    attrs[key] = val 
         else:
             self.id = str(uuid4())
             self.created_at = CURRENT_DATE
@@ -47,11 +48,8 @@ class BaseModel:
     def save(self) -> None:
         """ update public instance updated_at
         """
-        if isinstance(self.__dict__["updated_at"], str):
-            self.updated_at = self.__to_string(CURRENT_DATE)
-        else:
-            self.updated_at = CURRENT_DATE
 
+        self.updated_at = CURRENT_DATE  # update updated_at attribute
         storage.save()
 
     def to_dict(self) -> dict:
@@ -60,14 +58,12 @@ class BaseModel:
                  a dictionary containing all,
                  keys/values of __dict__ of the instance.
         """
-        base_dict = self.__dict__
-        if isinstance(base_dict["created_at"], datetime):
-            base_dict["created_at"] = self.__to_string(base_dict["created_at"])
-        if isinstance(base_dict["updated_at"], datetime):
-            base_dict["updated_at"] = self.__to_string(base_dict["updated_at"])
+        base_dict = dict(self.__dict__)
+        base_dict["created_at"] = self.__to_string(base_dict["created_at"])
+        base_dict["updated_at"] = self.__to_string(base_dict["updated_at"])
         base_dict["__class__"] = self.__class__.__name__
 
-        return self.__dict__
+        return base_dict
 
     def __to_string(self, date_obj: datetime) -> str:
         """ convert datetime object to string in ISO format.
