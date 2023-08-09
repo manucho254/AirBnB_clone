@@ -5,6 +5,7 @@
 import json
 import os
 from datetime import datetime
+from collections import OrderedDict
 
 
 class FileStorage:
@@ -34,16 +35,31 @@ class FileStorage:
 
         if hasattr(obj, "id"):
             key = "{}.{}".format(obj.__class__.__name__, obj.id)
-            self.__objects[key] = dict(obj.to_dict())
+            self.__objects[key] = obj
 
     def save(self) -> None:
         """ serializes __objects to the JSON file (path: __file_path)
         """
 
-        to_json = json.dumps(self.__objects)
+        obj_data = OrderedDict()
 
+        # convert all the objects to dictionaries
+        for key, val in self.__objects.items():
+            obj_data[key] = val.to_dict()
+
+        """
+           if file exist get the data in file first
+           concatnate the data in file with the new object data
+           then write to file.
+        """
+        if os.path.exists(self.__file_path):
+            with open(self.__file_path, "r") as file:
+                data = json.loads(file.read())
+                obj_data.update(data)
+
+        # create file and add object data to json file
         with open(type(self).__file_path, "w+") as file:
-            file.write("{}".format(to_json))
+            file.write("{}".format(json.dumps(obj_data)))
 
     def reload(self) -> None:
         """ deserializes the JSON file to __objects,
@@ -51,10 +67,14 @@ class FileStorage:
             otherwise, do nothing. If the file doesn’t exist,
             no exception should be raised).
         """
+        from models.base_model import BaseModel
 
-        if not os.path.exists(type(self).__file_path):
+        if not os.path.exists(self.__file_path):
             return
 
-        with open(type(self).__file_path, "r") as file:
-            data = file.read()
-            self.__objects = json.loads(data)
+        data = {}
+        with open(self.__file_path, "r") as file:
+            data = json.loads(file.read())
+
+        for key, val in data.items():
+            self.__objects[key] = BaseModel(**val)
