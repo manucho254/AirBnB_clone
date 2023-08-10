@@ -20,22 +20,31 @@ CLASSES = ["BaseModel", "User", "State", "City", "Amenity", "Place", "Review"]
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
-    def do_quit(self, line):
-        """ quit command to exit the program"""
+    def do_quit(self, line) -> bool:
+        """ quit command to exit the program
+            Args:
+                line: a string containig command arguments.
+        """
         return True
 
-    def do_EOF(self, line):
-        """EOF command to exit the program"""
+    def do_EOF(self, line) -> bool:
+        """EOF command to exit the program
+           Args:
+               line: a string containig command arguments.
+        """
         print()
         return True
 
-    def emptyline(self):
+    def emptyline(self) -> None:
         """overwrite the emptyline not to execute anything"""
         pass
 
-    def do_create(self, arg):
+    def do_create(self, arg) -> None:
         """Creates a new instance of BaseModel, saves it to the JSON file,
-        and prints the id"""
+           and prints the id.
+           Args:
+               arg: a string containig command arguments
+        """
         if not arg:
             print("** class name missing **")
         elif arg not in CLASSES:
@@ -73,9 +82,12 @@ class HBNBCommand(cmd.Cmd):
 
             print(obj_id)
 
-    def do_show(self, arg):
+    def do_show(self, arg) -> None:
         """Prints the string representation of an instance
-        based on the class name and id"""
+           based on the class name and id.
+           Args:
+               arg: a string containig command arguments.
+        """
         args = arg.split()
         if not args:
             print("** class name missing **")
@@ -91,9 +103,12 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
 
-    def do_destroy(self, arg):
+    def do_destroy(self, arg) -> None:
         """Deletes an instance based on the class name and id
-        (save the change into the JSON file)"""
+           (save the change into the JSON file).
+           Args:
+               arg: a string containig command arguments
+        """
         args = arg.split()
         if not args:
             print("** class name missing **")
@@ -110,9 +125,12 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
 
-    def do_all(self, arg):
+    def do_all(self, arg) -> None:
         """Prints all string representations of all instances based
-        or not on the class name"""
+           or not on the class name.
+           Args:
+               arg: a string containig command arguments.
+        """
         args = arg.split()
         obj_dict = storage.all()
         if not args:
@@ -127,9 +145,12 @@ class HBNBCommand(cmd.Cmd):
             ]
         print([str(obj) for obj in obj_list])
 
-    def do_update(self, arg):
+    def do_update(self, arg) -> None:
         """Updates an instance based on the class name and id by
-        adding or updating attribute"""
+           adding or updating attribute.
+           Args:
+               arg: a string containig command arguments.
+        """
         args = arg.split()
         if not args:
             print("** class name missing **")
@@ -152,9 +173,6 @@ class HBNBCommand(cmd.Cmd):
                 attribute_value = args[3].strip("\"")
                 setattr(obj, attribute_name, attribute_value)
                 obj.save()
-
-            with open("storage.json", "r") as file:
-                print(file.read())
 
 
 if __name__ == '__main__':

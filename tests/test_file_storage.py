@@ -21,7 +21,7 @@ class TestFileStorage(unittest.TestCase):
     def test_all_method(self):
         """ test getting all objects
         """
-        self.assertIsInstance(self.all_objs)
+        self.assertIsInstance(self.all_objs, dict)
 
 
 if __name__ == "__main__":
