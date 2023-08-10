@@ -51,10 +51,14 @@ class FileStorage:
            concatnate the data in file with the new object data
            then write to file.
         """
+
         if os.path.exists(self.__file_path):
             with open(self.__file_path, "r") as file:
                 data = json.loads(file.read())
-                obj_data.update(data)
+                for key, val in data.items():
+                    # check if key already in obj_data
+                    if key not in obj_data:
+                        obj_data[key] = val
 
         # create file and add object data to json file
         with open(type(self).__file_path, "w+") as file:

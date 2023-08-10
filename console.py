@@ -153,6 +153,9 @@ class HBNBCommand(cmd.Cmd):
                 setattr(obj, attribute_name, attribute_value)
                 obj.save()
 
+            with open("storage.json", "r") as file:
+                print(file.read())
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
