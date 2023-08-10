@@ -8,7 +8,7 @@ This is a minified version of AirBNB.
     - A database or files that store data (data = objects)
     - An API that provides a communication interface between the front-end and your data (retrieve, create, delete, update them)
 
-- Project Structure:
+##### Project Structure:
 ```
 ├── AUTHORS
 ├── README.md
