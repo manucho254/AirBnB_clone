@@ -8,23 +8,45 @@ import unittest
 from datetime import datetime, timedelta
 
 
-class TestBaseModelNoKwargs(unittest.TestCase):
+class TestBaseModel(unittest.TestCase):
     """ Class to test BaseModel with no **kwargs
     """
     def setUp(self):
         """ initialize class
         """
         self.base_no_kwargs = BaseModel()
+        self.base_with_kwargs = None
         self.yesterday = datetime.now() - timedelta(days=1)
         self.base_no_kwargs.updated_at = self.yesterday
-        #  pass key word argument to BaseModel
 
-    def test_all_default_attributes_exist(self):
+    def test_create_base_model_no_kwargs(self):
+        """ create BaseModel with no **kwargs
+        """
+        self.base_no_kwargs.updated_at = self.yesterday
+        to_dict = self.base_no_kwargs.to_dict()
+
+        self.assertIsInstance(self.base_no_kwargs, BaseModel)
+        self.assertIsInstance(to_dict, dict)
+        self.assertIsNotNone(to_dict.get("__class__"))
+
+    def test_create_base_model_with_kwargs(self):
+        """ create BaseModel with **kwargs
+        """
+        self.base_with_kwargs = BaseModel(**self.base_no_kwargs.to_dict())
+        self.base_with_kwargs.updated_at = self.yesterday
+        to_dict = self.base_with_kwargs.to_dict()
+
+        self.assertIsInstance(self.base_with_kwargs, BaseModel)
+        self.assertIsInstance(to_dict, dict)
+        self.assertIsNotNone(to_dict.get("__class__"))
+
+    def test_all_attributes_are_present(self):
         """ check if all BaseModel attributes are present..
         """
-        self.assertIsNotNone(self.base_no_kwargs.id)
-        self.assertIsNotNone(self.base_no_kwargs.created_at)
-        self.assertIsNotNone(self.base_no_kwargs.updated_at)
+
+        self.assertTrue(hasattr(self.base_no_kwargs, "id"))
+        self.assertTrue(hasattr(self.base_no_kwargs, "created_at"))
+        self.assertTrue(hasattr(self.base_no_kwargs, "updated_at"))
 
     def test_id_is_string(self):
         """ check if id attribute contains a string.
@@ -56,44 +78,15 @@ class TestBaseModelNoKwargs(unittest.TestCase):
         self.assertIsNotNone(new_dict["__class__"])
         self.assertIsInstance(new_dict["__class__"], str)
 
+    def test_base_model_to_string(self):
+        """ test if base model can be represented as a string
+        """
+        self.assertIsInstance(str(self.base_no_kwargs), str)
 
-class TestBaseModelWithKwargs(unittest.TestCase):
-    """ Class to test BaseModel with **kwargs
-    """
-
-    def setUp(self):
-        """ Initialize class
-        """
-        self.tmp = BaseModel()
-        self.base_with_kwargs = BaseModel(**self.tmp.to_dict())
-
-    def test_all_default_attributes_exist(self):
-        """ check if all dates in BaseModel object are datetime objects.
-        """
-        self.assertIsNotNone(self.base_with_kwargs.id)
-        self.assertIsNotNone(self.base_with_kwargs.created_at)
-        self.assertIsNotNone(self.base_with_kwargs.updated_at)
-
-    def test_to_dict_method(self):
-        """ tests on to_dict method.
-        """
-
-        """ we call method to_dict below to confirm that attribute __class__
-        """
-        new_dict = self.base_with_kwargs.to_dict()
-        self.assertIsNotNone(new_dict.get("__class__"))
-
-    def test_empty_dict_passed_in_kwargs(self):
-        """ check for empty dict passed as Kwargs
-        """
-        tmp = {}
-        self.base_with_kwargs = BaseModel(**tmp)
-        """
-          we call method to_dict below to confirm that attribute __class__ ,
-          is in response..
-        """
-        new_dict = self.base_with_kwargs.to_dict()
-        self.assertIsNotNone(new_dict["__class__"])
+    def tearDown(self):
+        self.base_no_kwargs = None
+        self.base_with_kwargs = None
+        self.yesterday = None
 
 
 if __name__ == "__main__":

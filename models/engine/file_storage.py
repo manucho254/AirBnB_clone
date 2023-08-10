@@ -29,7 +29,16 @@ class FileStorage:
             Args:
                 obj: an Object
         """
-        if obj is None:
+        from models.base_model import BaseModel
+        from models.user import User
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.place import Place
+        from models.review import Review
+
+        classes = [BaseModel, User, State, Amenity, Place, Review]
+        if obj is None or not any(isinstance(obj, x) for x in classes):
             return
 
         if hasattr(obj, "id"):
