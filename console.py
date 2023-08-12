@@ -203,6 +203,11 @@ class HBNBCommand(cmd.Cmd):
         print(count)
 
     def default(self, line) -> None:
+        """ called on an input line when,
+            the command prefix is not recognized
+            Args:
+                line: a string containing commandline arguments
+        """
         args = line.split(".")
 
         if len(args) != 2:
@@ -230,6 +235,8 @@ class HBNBCommand(cmd.Cmd):
             Args:
                 line: string of arguments
                 args: an array of arguments
+            Return:
+                  True if function is run else False
         """
         functions = ["all", "count", "show", "destroy", "update"]
 
@@ -242,51 +249,46 @@ class HBNBCommand(cmd.Cmd):
         if func_name not in functions:
             return False
 
-        # For functions with one argument
-        if length == 1:
-            if func_name == "all":
-                self.do_all(class_name)
+        del args_list[0]
+        # add only the class name instead of <class>.
+        args_list.insert(0, class_name)
 
-            if func_name == "count":
-                self.__do_count(class_name)
-
+        if func_name == "all":
+            self.do_all(class_name)
             return True
+        if func_name == "count":
+            self.__do_count(class_name)
+            return True
+        if func_name == "show":
+            self.do_show(" ".join([args_list[x] for x in range(length)]))
+            return True
+        if func_name == "destroy":
+            self.do_destroy(" ".join([args_list[x] for x in range(length)]))
+            return True
+
         # For functions with more than one argument
-        if length > 1:
-            if func_name == "show" and length == 2:
-                self.do_show(" ".join([class_name, args_list[1]]))
+        new_args = line.split(" ", 1)
+        new_dict = {}
 
-            if func_name == "destroy" and length == 2:
-                self.do_destroy(" ".join([class_name, args_list[1]]))
-
-            new_args = line.split(" ", 1)
-
+        if len(new_args) > 1:
             try:
                 new_dict = json.loads(new_args[1].strip(")"))
             except Exception as e:
-                new_dict = ""
+                new_dict = {}
 
-            # Update for if a dictionary is provided
-            if func_name == "update" and isinstance(new_dict, dict):
-                arr = [class_name, args_list[1], json.dumps(new_dict)]
-                arr.append("from_func")
-                self.do_update(arr)
-                return True
-
-            if func_name == "update" and length == 2:
-                arr = [class_name, args_list[1]]
-                self.do_update(" ".join(arr))
-
-            if func_name == "update" and length > 2:
-                if length > 4:  # we want to update only the on attribute
-                    length = 4
-                arr = [args_list[x] for x in range(1, length)]
-                arr.insert(0, class_name)
-                self.do_update(" ".join(arr))
-
-            return True
+        # Update for if a dictionary is provided in arguments
+        condition = isinstance(new_dict, dict) and len(new_dict) > 0
+        if func_name == "update" and condition:
+            arr = [class_name, args_list[1], json.dumps(new_dict)]
+            arr.append("from_func")
+            self.do_update(arr)
         else:
-            return False
+            if length > 4:  # we want to update only the on attribute
+                length = 4
+            arr = [args_list[x].strip(")") for x in range(length)]
+            self.do_update(" ".join(arr))
+            return True
+        return False
 
 
 if __name__ == '__main__':
