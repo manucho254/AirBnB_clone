@@ -245,7 +245,7 @@ class HBNBCommand(cmd.Cmd):
         func_name = args_list[0].split(".")[1]  # The function name
         length = len(args_list)  # length of argument list
 
-        # Check if function is in out list of functions
+        # Check if function is in our list of functions
         if func_name not in functions:
             return False
 
@@ -283,7 +283,7 @@ class HBNBCommand(cmd.Cmd):
             arr.append("from_func")
             self.do_update(arr)
         else:
-            if length > 4:  # we want to update only the on attribute
+            if length > 4:  # we want to update only one attribute
                 length = 4
             arr = [args_list[x].strip(")") for x in range(length)]
             self.do_update(" ".join(arr))
