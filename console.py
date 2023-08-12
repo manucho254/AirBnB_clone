@@ -151,7 +151,13 @@ class HBNBCommand(cmd.Cmd):
            Args:
                arg: a string containig command arguments.
         """
-        args = arg.split()
+
+        attrs = {}
+        if "from_func" in arg:
+            args = arg
+            attrs = json.loads(args[2])
+        else:
+            args = arg.split()
         if not args:
             print("** class name missing **")
         elif args[0] not in CLASSES:
@@ -161,6 +167,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             key = "{}.{}".format(args[0], args[1])
             obj_dict = storage.all()
+
             if key not in obj_dict:
                 print("** no instance found **")
             elif len(args) < 3:
@@ -169,10 +176,117 @@ class HBNBCommand(cmd.Cmd):
                 print("** value missing **")
             else:
                 obj = obj_dict[key]
-                attribute_name = args[2]
-                attribute_value = args[3].strip("\"")
-                setattr(obj, attribute_name, attribute_value)
+                if len(attrs) > 0:
+                    for key, val in attrs.items():
+                        if hasattr(obj, key):
+                            setattr(obj, key, val)
+                else:
+                    attribute_name = args[2]
+                    attribute_value = args[3].strip("\"")
+                    if hasattr(obj, attribute_name):
+                        setattr(obj, attribute_name, attribute_value)
                 obj.save()
+
+    def __do_count(self, obj) -> int:
+        """ count the number of objects in storage
+            Return:
+                  number of objects in storage
+        """
+        obj_dict = storage.all()
+        count = 0
+
+        for key, value in obj_dict.items():
+            to_dict = value.to_dict()
+            if to_dict["__class__"] == obj:
+                count += 1
+
+        print(count)
+
+    def default(self, line) -> None:
+        args = line.split(".")
+
+        if len(args) != 2:
+            return cmd.Cmd.default(self, line)
+
+        # Validate that the class in in our classes list
+        if args[0] not in CLASSES:
+            return cmd.Cmd.default(self, line)
+
+        # Check that we have brackets
+        if "(" not in args[1] or ")" not in args[1]:
+            return cmd.Cmd.default(self, line)
+
+        # Remove  all unwanted characters
+        args = line.replace("(", " ").replace(")", " ")
+        args = args.replace('"', '').replace("'", " ").replace(",", "")
+        # Remove whitespaces
+        args = args.strip()
+
+        if not self.__run_functions(line, args):
+            return cmd.Cmd.default(self, line)
+
+    def __run_functions(self, line, args) -> bool:
+        """ method to to invoke all the functions
+            Args:
+                line: string of arguments
+                args: an array of arguments
+        """
+        functions = ["all", "count", "show", "destroy", "update"]
+
+        args_list = args.split(" ")  # get list of arguments
+        class_name = args_list[0].split(".")[0]  # Class name
+        func_name = args_list[0].split(".")[1]  # The function name
+        length = len(args_list)  # length of argument list
+
+        # Check if function is in out list of functions
+        if func_name not in functions:
+            return False
+
+        # For functions with one argument
+        if length == 1:
+            if func_name == "all":
+                self.do_all(class_name)
+
+            if func_name == "count":
+                self.__do_count(class_name)
+
+            return True
+        # For functions with more than one argument
+        if length > 1:
+            if func_name == "show" and length == 2:
+                self.do_show(" ".join([class_name, args_list[1]]))
+
+            if func_name == "destroy" and length == 2:
+                self.do_destroy(" ".join([class_name, args_list[1]]))
+
+            new_args = line.split(" ", 1)
+
+            try:
+                new_dict = json.loads(new_args[1].strip(")"))
+            except Exception as e:
+                new_dict = ""
+
+            # Update for if a dictionary is provided
+            if func_name == "update" and isinstance(new_dict, dict):
+                arr = [class_name, args_list[1], json.dumps(new_dict)]
+                arr.append("from_func")
+                self.do_update(arr)
+                return True
+
+            if func_name == "update" and length == 2:
+                arr = [class_name, args_list[1]]
+                self.do_update(" ".join(arr))
+
+            if func_name == "update" and length > 2:
+                if length > 4:  # we want to update only the on attribute
+                    length = 4
+                arr = [args_list[x] for x in range(1, length)]
+                arr.insert(0, class_name)
+                self.do_update(" ".join(arr))
+
+            return True
+        else:
+            return False
 
 
 if __name__ == '__main__':
