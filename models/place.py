@@ -6,21 +6,8 @@ from models.base_model import BaseModel
 
 
 class Place(BaseModel):
-    """ class Place that defines a place.
-        Attributes:
-                  city_id: the city id, it will be the City.id
-                  user_id: the user id, it will be the User.id
-                  name: name of place.
-                  description: a description for place.
-                  number_rooms: number of rooms
-                  number_bathrooms: number of bathroooms
-                  max_guest: maximum number of guests
-                  price_by_night: price per night
-                  latitude: latitude value
-                  longitude: longitude value
-                  amenity_ids: list of amenity ids, ["Amenity.id",]
+    """ class Place that defines a place. """
 
-    """
     city_id: str = ""
     user_id: str = ""
     name: str = ""
