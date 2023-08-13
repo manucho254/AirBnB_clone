@@ -3,6 +3,7 @@
 
 import cmd
 import json
+import os
 
 from models import storage
 from models.base_model import BaseModel
@@ -158,6 +159,7 @@ class HBNBCommand(cmd.Cmd):
             attrs = json.loads(args[2])
         else:
             args = arg.split()
+
         if not args:
             print("** class name missing **")
         elif args[0] not in CLASSES:
@@ -178,13 +180,11 @@ class HBNBCommand(cmd.Cmd):
                 obj = obj_dict[key]
                 if len(attrs) > 0:
                     for key, val in attrs.items():
-                        if hasattr(obj, key):
-                            setattr(obj, key, val)
+                        setattr(obj, key, val)
                 else:
                     attribute_name = args[2]
                     attribute_value = args[3].strip("\"")
-                    if hasattr(obj, attribute_name):
-                        setattr(obj, attribute_name, attribute_value)
+                    setattr(obj, attribute_name, attribute_value)
                 obj.save()
 
     def __do_count(self, obj) -> int:
@@ -208,7 +208,7 @@ class HBNBCommand(cmd.Cmd):
             Args:
                 line: a string containing commandline arguments
         """
-        args = line.split(".")
+        args = line.split(".", 1)
 
         if len(args) != 2:
             return cmd.Cmd.default(self, line)
@@ -268,20 +268,21 @@ class HBNBCommand(cmd.Cmd):
 
         # For functions with more than one argument
         new_args = line.split(" ", 1)
-        new_dict = {}
+        to_data = ""
 
         if len(new_args) > 1:
             try:
-                new_dict = json.loads(new_args[1].strip(")"))
+                new_args[1] = new_args[1].replace("'", '"')
+                to_data = json.loads(new_args[1].strip(")"))
             except Exception as e:
-                new_dict = {}
+                to_data = ""
 
         # Update for if a dictionary is provided in arguments
-        condition = isinstance(new_dict, dict) and len(new_dict) > 0
-        if func_name == "update" and condition:
-            arr = [class_name, args_list[1], json.dumps(new_dict)]
+        if func_name == "update" and isinstance(to_data, dict):
+            arr = [class_name, args_list[1], json.dumps(to_data)]
             arr.append("from_func")
             self.do_update(arr)
+            return True
         else:
             if length > 4:  # we want to update only one attribute
                 length = 4

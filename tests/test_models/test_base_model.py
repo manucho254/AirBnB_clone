@@ -48,6 +48,22 @@ class TestBaseModel(unittest.TestCase):
         self.assertTrue(hasattr(self.base_no_kwargs, "created_at"))
         self.assertTrue(hasattr(self.base_no_kwargs, "updated_at"))
 
+    def test_all_attributes_data_types(self):
+
+        self.base_no_kwargs = BaseModel()
+        self.base_no_kwargs.save()
+        self.assertIsInstance(self.base_no_kwargs.id, str)
+        self.assertIsInstance(self.base_no_kwargs.created_at, datetime)
+        self.assertIsInstance(self.base_no_kwargs.created_at, datetime)
+
+    def test_add_new_attribute(self):
+
+        self.base_no_kwargs = BaseModel()
+        self.base_no_kwargs.test = "cool"
+        self.base_no_kwargs.save()
+
+        self.assertTrue(hasattr(self.base_no_kwargs, "test"))
+
     def test_id_is_string(self):
         """ check if id attribute contains a string.
         """
@@ -62,6 +78,14 @@ class TestBaseModel(unittest.TestCase):
     def test_save_method(self):
         """ test save method in BaseModel
         """
+        previous_date = self.base_no_kwargs.updated_at
+        self.base_no_kwargs.save()
+
+        self.assertNotEqual(previous_date, self.base_no_kwargs.updated_at)
+
+    def test_update_at_is_modified_on_save(self):
+        self.base_no_kwargs = BaseModel()
+        self.base_no_kwargs.updated_at = self.yesterday
         previous_date = self.base_no_kwargs.updated_at
         self.base_no_kwargs.save()
 

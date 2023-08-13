@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Class FileStorage module
+""" module for implementation of the FileStorage class
 """
 
 import json
@@ -9,10 +9,7 @@ from collections import OrderedDict
 
 class FileStorage:
     """ class that serializes instances to a JSON,
-        file and deserializes JSON file to instances.
-    Attributes:
-              __file_path: path to json file
-              __objects: dict to store objects by id
+    file and deserializes JSON file to instances.
     """
     __file_path = "storage.json"
     __objects = {}
@@ -76,22 +73,14 @@ class FileStorage:
         if not os.path.exists(self.__file_path):
             return
 
+        classes = {"BaseModel": BaseModel, "User": User,
+                   "Place": Place, "Amenity": Amenity,
+                   "City": City, "Review": Review, "State": State}
+
         data = {}
         with open(self.__file_path, "r") as file:
             data = json.loads(file.read())
 
         for key, val in data.items():
-            if val["__class__"] == "BaseModel":
-                self.__objects[key] = BaseModel(**val)
-            if val["__class__"] == "User":
-                self.__objects[key] = User(**val)
-            if val["__class__"] == "State":
-                self.__objects[key] = Place(**val)
-            if val["__class__"] == "City":
-                self.__objects[key] = City(**val)
-            if val["__class__"] == "Amenity":
-                self.__objects[key] = Amenity(**val)
-            if val["__class__"] == "Place":
-                self.__objects[key] = Place(**val)
-            if val["__class__"] == "Review":
-                self.__objects[key] = Review(**val)
+            obj = classes[val['__class__']](**val)
+            self.__objects[key] = obj
