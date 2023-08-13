@@ -6,10 +6,12 @@ from models import storage
 from models.base_model import BaseModel
 
 import unittest
+import os
+import json
 
 
 class TestFileStorage(unittest.TestCase):
-    """ Class to test FileStorage
+    """ Class to test FileStorage class
     """
 
     def setUp(self):
@@ -42,6 +44,20 @@ class TestFileStorage(unittest.TestCase):
         self.size = len(self.all_objs)
         self.assertEqual(self.size, new_size)
 
+    def test_json_file_exists(self):
+        """ check if json file is created
+        """
+        self.assertTrue(os.path.exists("storage.json"))
+
+    def test_file_contains_json_data(self):
+        """ check if
+        """
+        data = ""
+        with open("storage.json", "r") as file:
+            data = json.loads(file.read())
+
+        self.assertIsInstance(data, dict)
+
     def test_save_method(self):
         """ test save method
         """
@@ -52,11 +68,21 @@ class TestFileStorage(unittest.TestCase):
         self.size = len(self.all_objs)
         self.assertGreater(self.size, new_size)
 
+    def test_relaod_method(self):
+        """
+        """
+        os.remove("storage.json")
+        storage.reload()
+        self.all_objs = storage.all()
+        self.assertIsInstance(self.all_objs, dict)
+
     def tearDown(self):
         """ teardown function
         """
         self.all_objs = None
         self.size = 0
+        with open("storage.json", "w") as file:
+            file.write("{}")
 
 
 if __name__ == "__main__":
