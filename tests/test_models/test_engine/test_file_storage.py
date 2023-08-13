@@ -22,16 +22,13 @@ class TestFileStorage(unittest.TestCase):
         self.size = len(self.all_objs)
 
     def test_create_new_instance_no_args(self):
-
         self.assertIsInstance(FileStorage(), FileStorage)
 
     def test_create_new_instance_with_args(self):
-
         with self.assertRaises(TypeError):
             FileStorage("cool")
 
     def test_invoke_none_existent_method(self):
-        
         with self.assertRaises(AttributeError):
             FileStorage().run()
 
@@ -39,7 +36,6 @@ class TestFileStorage(unittest.TestCase):
         self.assertIsInstance(storage, FileStorage)
 
     def test_private_attributes_not_accessible(self):
-
         self.assertFalse(hasattr(storage, "__file_path"))
         self.assertFalse(hasattr(storage, "__objects"))
 
