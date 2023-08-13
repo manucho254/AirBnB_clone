@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Class FileStorage module
+""" module for implementation of the FileStorage class
 """
 
 import json
@@ -10,9 +10,9 @@ from collections import OrderedDict
 class FileStorage:
     """ class that serializes instances to a JSON,
         file and deserializes JSON file to instances.
-    Attributes:
-              __file_path: path to json file
-              __objects: dict to store objects by id
+        Attributes:
+                  __file_path: path to json file
+                  __objects: dict to store objects by id
     """
     __file_path = "storage.json"
     __objects = {}
