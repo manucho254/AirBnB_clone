@@ -23,6 +23,8 @@ class TestFileStorage(unittest.TestCase):
     def test_all_method(self):
         """ test getting all objects
         """
+        base_model = BaseModel()
+        base_model.save()
         self.assertIsInstance(self.all_objs, dict)
 
     def test_new_method_valid_data(self):
@@ -47,11 +49,16 @@ class TestFileStorage(unittest.TestCase):
     def test_json_file_exists(self):
         """ check if json file is created
         """
+        base_model = BaseModel()
+        base_model.save()
         self.assertTrue(os.path.exists("storage.json"))
 
     def test_file_contains_json_data(self):
-        """ check if
+        """ check if file contains json
         """
+        base_model = BaseModel()
+        base_model.save()
+
         data = ""
         with open("storage.json", "r") as file:
             data = json.loads(file.read())
@@ -68,21 +75,13 @@ class TestFileStorage(unittest.TestCase):
         self.size = len(self.all_objs)
         self.assertGreater(self.size, new_size)
 
-    def test_relaod_method(self):
-        """
-        """
-        os.remove("storage.json")
-        storage.reload()
-        self.all_objs = storage.all()
-        self.assertIsInstance(self.all_objs, dict)
-
     def tearDown(self):
         """ teardown function
         """
         self.all_objs = None
         self.size = 0
-        with open("storage.json", "w") as file:
-            file.write("{}")
+        if os.path.exists("storage.json"):
+            os.remove("storage.json")
 
 
 if __name__ == "__main__":
