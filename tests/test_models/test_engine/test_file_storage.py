@@ -111,6 +111,14 @@ class TestFileStorage(unittest.TestCase):
         self.size = len(self.all_objs)
         self.assertGreater(self.size, new_size)
 
+    def test_reload_with_arg(self):
+        with self.assertRaises(TypeError):
+            storage.reload(None)
+
+    def test_save_with_arg(self):
+        with self.assertRaises(TypeError):
+            storage.reload(None)
+
     def tearDown(self):
         """ teardown function
         """
