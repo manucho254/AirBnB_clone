@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" City class test module
+""" module to test City class
 """
 
 import unittest
@@ -10,7 +10,7 @@ from models.base_model import BaseModel
 
 
 class TestCity(unittest.TestCase):
-    """ class TestCity
+    """ class TestCity to test City class.
     """
     def setUp(self):
         """ initialize class

@@ -11,7 +11,7 @@ import json
 
 
 class TestFileStorage(unittest.TestCase):
-    """ Class to test FileStorage
+    """ Class to test FileStorage class
     """
 
     def setUp(self):

@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Review class test module
+""" module to test FileStorage class.
 """
 
 import unittest
@@ -11,7 +11,7 @@ from models.base_model import BaseModel
 
 
 class TestReview(unittest.TestCase):
-    """ class TestReview
+    """ class TestReview to test Review class.
     """
     def setUp(self):
         """ initialize class

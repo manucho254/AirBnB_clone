@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Amenity class test module
+""" module to test Amenity class
 """
 
 import unittest
@@ -11,7 +11,7 @@ from models.base_model import BaseModel
 
 
 class TestAmenity(unittest.TestCase):
-    """ class TestAmenity
+    """ class TestAmenity to run tests on Amenity
     """
     def setUp(self):
         """ initialize class

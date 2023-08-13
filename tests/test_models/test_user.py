@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" User class test module
+""" module to test User class.
 """
 
 import unittest
@@ -11,7 +11,7 @@ from models.base_model import BaseModel
 
 
 class TestUser(unittest.TestCase):
-    """ class TestUser
+    """ class TestUser to test User class.
     """
     def setUp(self):
         """ initialize class
