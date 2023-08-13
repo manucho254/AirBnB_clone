@@ -4,6 +4,7 @@
 
 from models import storage
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
 
 import unittest
 import os
@@ -19,6 +20,23 @@ class TestFileStorage(unittest.TestCase):
         """
         self.all_objs = storage.all()
         self.size = len(self.all_objs)
+
+    def test_create_new_instance_no_args(self):
+
+        self.assertIsInstance(FileStorage(), FileStorage)
+
+    def test_create_new_instance_with_args(self):
+
+        with self.assertRaises(TypeError):
+            FileStorage("cool")
+
+    def test_invoke_none_existent_method(self):
+        
+        with self.assertRaises(AttributeError):
+            FileStorage().run()
+
+    def test_storage_is_instance_of_filestorage(self):
+        self.assertIsInstance(storage, FileStorage)
 
     def test_private_attributes_not_accessible(self):
 
@@ -75,7 +93,7 @@ class TestFileStorage(unittest.TestCase):
     def test_new_method_return_value(self):
         self.assertIsNone(storage.new("test"))
 
-    def test_new_method_return_value(self):
+    def test_all_method_return_value(self):
         self.assertIsInstance(storage.all(), dict)
 
     def test_id_in_dict(self):
