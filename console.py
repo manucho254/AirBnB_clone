@@ -3,6 +3,7 @@
 
 import cmd
 import json
+import os
 
 from models import storage
 from models.base_model import BaseModel
@@ -158,6 +159,7 @@ class HBNBCommand(cmd.Cmd):
             attrs = json.loads(args[2])
         else:
             args = arg.split()
+
         if not args:
             print("** class name missing **")
         elif args[0] not in CLASSES:
@@ -178,13 +180,11 @@ class HBNBCommand(cmd.Cmd):
                 obj = obj_dict[key]
                 if len(attrs) > 0:
                     for key, val in attrs.items():
-                        if hasattr(obj, key):
-                            setattr(obj, key, val)
+                        setattr(obj, key, val)
                 else:
                     attribute_name = args[2]
                     attribute_value = args[3].strip("\"")
-                    if hasattr(obj, attribute_name):
-                        setattr(obj, attribute_name, attribute_value)
+                    setattr(obj, attribute_name, attribute_value)
                 obj.save()
 
     def __do_count(self, obj) -> int:
