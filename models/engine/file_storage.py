@@ -74,22 +74,14 @@ class FileStorage:
         if not os.path.exists(self.__file_path):
             return
 
+        classes = {"BaseModel": BaseModel, "User": User,
+                   "Place": Place, "Amenity": Amenity,
+                   "City": City, "Review": Review, "State": State}
+
         data = {}
         with open(self.__file_path, "r") as file:
             data = json.loads(file.read())
 
         for key, val in data.items():
-            if val["__class__"] == "BaseModel":
-                self.__objects[key] = BaseModel(**val)
-            if val["__class__"] == "User":
-                self.__objects[key] = User(**val)
-            if val["__class__"] == "State":
-                self.__objects[key] = Place(**val)
-            if val["__class__"] == "City":
-                self.__objects[key] = City(**val)
-            if val["__class__"] == "Amenity":
-                self.__objects[key] = Amenity(**val)
-            if val["__class__"] == "Place":
-                self.__objects[key] = Place(**val)
-            if val["__class__"] == "Review":
-                self.__objects[key] = Review(**val)
+            obj = classes[val['__class__']](**val)
+            self.__objects[key] = obj
