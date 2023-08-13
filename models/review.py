@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Review class
+""" module for implementation of Review class.
 """
 
 from models.base_model import BaseModel
