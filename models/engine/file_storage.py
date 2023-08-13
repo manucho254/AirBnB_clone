@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ module for implementation of the FileStorage class
+    Filestorage handles serializes and deserializes JSON types
 """
 
 import json
