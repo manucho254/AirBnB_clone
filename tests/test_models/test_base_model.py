@@ -107,6 +107,14 @@ class TestBaseModel(unittest.TestCase):
         """
         self.assertIsInstance(str(self.base_no_kwargs), str)
 
+    def test_to_dict_with_args(self):
+        with self.assertRaises(TypeError):
+            self.base_no_kwargs.to_dict("cool")
+
+    def test_save_method_with_args(self):
+        with self.assertRaises(TypeError):
+            self.base_no_kwargs.save("cool")
+
     def tearDown(self):
         self.base_no_kwargs = None
         self.base_with_kwargs = None
