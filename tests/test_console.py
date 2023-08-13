@@ -9,6 +9,8 @@ from io import StringIO
 from console import HBNBCommand
 
 
+class ConsolePromptTest(unittest.TestCase):
+    """Console class test cases."""
     def test_Console_prompt(self):
         """Check the prompt"""
         self.assertEqual("(hbnb) ", HBNBCommand.prompt)
