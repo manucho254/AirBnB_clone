@@ -30,8 +30,11 @@ class TestConsole(unittest.TestCase):
         """ test command all
         """
     def test_command_show(self):
-        """ test comman show
+        """ test command show
         """
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("help show")
+            print(f.getvalue())
 
     def test_command_destroy(self):
         """ test command destroy
