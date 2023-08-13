@@ -20,11 +20,15 @@ class TestFileStorage(unittest.TestCase):
         self.all_objs = storage.all()
         self.size = len(self.all_objs)
 
+    def test_private_attributes_not_accessible(self):
+
+        self.assertFalse(hasattr(storage, "__file_path"))
+        self.assertFalse(hasattr(storage, "__objects"))
+
     def test_all_method(self):
         """ test getting all objects
         """
-        base_model = BaseModel()
-        base_model.save()
+        self.all_objs = storage.all()
         self.assertIsInstance(self.all_objs, dict)
 
     def test_new_method_valid_data(self):
@@ -64,6 +68,25 @@ class TestFileStorage(unittest.TestCase):
             data = json.loads(file.read())
 
         self.assertIsInstance(data, dict)
+
+    def test_reload_method_return_value(self):
+        self.assertIsNone(storage.reload())
+
+    def test_new_method_return_value(self):
+        self.assertIsNone(storage.new("test"))
+
+    def test_new_method_return_value(self):
+        self.assertIsInstance(storage.all(), dict)
+
+    def test_id_in_dict(self):
+        base_model = BaseModel()
+        base_model.save()
+
+        new_id = "{}.{}".format("BaseModel", base_model.id)
+
+        with open("storage.json", "r") as file:
+            data = file.read()
+            self.assertIn(new_id, data)
 
     def test_save_method(self):
         """ test save method
