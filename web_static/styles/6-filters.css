@@ -56,3 +56,21 @@ h4 {
     font-weight: 400;
     font-size: 14px;
 }
+
+ul {
+    list-style-type: none;
+}
+
+.popover{
+    position: absolute;
+    top: 70px;
+    width: 205px;
+    padding: 22px;
+    background-color: #FAFAFA;
+    border: 1px solid #DDDDDD; 
+    border-radius: 4px;
+}
+
+.popover li ul li{
+    padding-left: 10px;
+}
