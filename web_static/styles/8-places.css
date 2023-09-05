@@ -43,41 +43,41 @@ article .information {
     height: 80px;
     font-size: 30px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
 article .information .max_guest {
     height: 100%;
-    width: 100px;
+    width: 50px;
     background-image: url("./../images/icon_group.png");
     background-repeat: no-repeat;
     background-position: center;
-    background-position: top center;
+    background-position: left;
     padding-top: 15px;
 }
 
 article .information .number_rooms {
     height: 100%;
-    width: 100px;
+    width: 50px;
     background-image: url("./../images/icon_bed.png");
     background-repeat: no-repeat;
-    background-position: top center;
+    background-position: center;
     padding-top: 15px;
 }
 
 article .information .number_bathrooms {
     height: 100%;
-    width: 100px;
+    width: 50px;
     background-image: url("./../images/icon_bath.png");
     background-repeat: no-repeat;
-    background-position: top center;
+    background-position: right;
     padding-top: 15px;
 }
 
 article .user {
     position: relative;
-    left: -10rem;
+    left: -10px;
     font-weight: bold;
     margin-top: 20px;
 }
