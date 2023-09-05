@@ -48,6 +48,7 @@ article .information {
     font-size: 30px;
     display: flex;
     flex-wrap: wrap;
+    padding-top: 10px;
 }
 
 article .information .max_guest {
@@ -191,6 +192,7 @@ article .reviews ul li p{
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (min-width: 360px) and (max-width: 600px) {
+
     article .information .max_guest {
         width: 90px;
     }

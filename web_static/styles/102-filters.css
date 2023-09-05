@@ -58,11 +58,15 @@ ul {
     list-style-type: none;
 }
 
-.popover {
-    /* display: none; */
-    position: absolute;
-    margin-top: 170px;
-    width: 200px;
+.drop-items {
+    width: 100%;
+    display: flex;
+    gap: 5px;
+}
+
+.drop-items .popover {
+    display: none;
+    width: 205px;
     padding: 22px;
     background-color: #FAFAFA;
     border: 1px solid #DDDDDD; 
@@ -93,8 +97,8 @@ ul {
         max-width: 100%;
     }
 
-    .popover {
-        width: auto;
+    .drop-items {
+        width: 70%;
     }
 }
 
@@ -117,10 +121,6 @@ ul {
     .container .filters button {
         max-width: 100%;
     }
-
-    .popover {
-        width: auto;
-    }
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
@@ -141,10 +141,6 @@ ul {
 
     .container .filters button {
         max-width: 100%;
-    }
-
-    .popover {
-        width: auto;
     }
 }
 
